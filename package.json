@@ -10,6 +10,8 @@
   "copy": "cpx \"index.html\" dist/ && cpx \"css/style.min.css\" dist/css && cpx \"js/*.min.js\" dist/js",
   "fix-dist-links": "node tools/fix-dist-links.js",
   "build": "npm run clean && npm run build:js && npm run build:css && npm run copy && npm run fix-dist-links",
+  "dev": "npm run build && npx serve dist -l 8000",
+  "start": "npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
