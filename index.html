@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>职位评分器 • 职位评估工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body class="bg-dark text-light">
+    <div class="container py-4">
+      <header class="d-flex align-items-center gap-3 mb-3">
+        <div class="logo">S</div>
+        <div>
+          <h1 class="h5 mb-0">职位评分器</h1>
+          <p class="small text-muted mb-0">按薪酬、工时、通勤、打卡/WFH 与职业前景等综合评估工作得分（满分100）。</p>
+        </div>
+      </header>
+
+      <div class="row g-3">
+        <div class="col-12 col-lg-7">
+          <div class="card p-3 shadow-sm">
+            <div class="d-flex align-items-center mb-2">
+              <strong>输入职位信息</strong>
+              <span class="badge bg-secondary ms-auto">总权重会标准化</span>
+            </div>
+
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label small">年薪（年）</label>
+                <input id="annual_salary" class="form-control form-control-sm" type="number" min="0" step="1000" placeholder="例如 200000">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">期望年薪（可选）</label>
+                <input id="expected_salary" class="form-control form-control-sm" type="number" min="0" step="1000" placeholder="例如 250000">
+              </div>
+
+              <div class="col-6">
+                <label class="form-label small">合同工时（小时/周）</label>
+                <input id="contracted_hours" class="form-control form-control-sm" type="number" min="0" step="1" placeholder="例如 40">
+              </div>
+              <div class="col-6">
+                <label class="form-label small">实际工时（小时/周）</label>
+                <input id="actual_hours" class="form-control form-control-sm" type="number" min="0" step="1" placeholder="例如 45">
+              </div>
+
+              <div class="col-6">
+                <label class="form-label small">单程通勤（分钟）</label>
+                <input id="commute_mins" class="form-control form-control-sm" type="number" min="0" step="1" placeholder="例如 45">
+              </div>
+              <div class="col-6 d-flex align-items-center">
+                <div class="me-2 w-100">
+                  <label class="form-label small">公司是否强制打卡</label>
+                  <div>
+                    <div id="punch_toggle" class="form-check form-switch d-inline-block" data-on="true" role="button">
+                      <input class="form-check-input" type="checkbox" checked>
+                    </div>
+                    <span id="punch_label" class="small text-muted ms-2 align-middle">是</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 d-flex align-items-center">
+                <div class="me-2 w-100">
+                  <label class="form-label small">是否支持部分在家办公</label>
+                  <div>
+                    <div id="wfh_toggle" class="form-check form-switch d-inline-block" data-on="true" role="button">
+                      <input class="form-check-input" type="checkbox" checked>
+                    </div>
+                    <span id="wfh_label" class="small text-muted ms-2 align-middle">支持</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <label class="form-label small">公司业务前景</label>
+                <select id="business_outlook" class="form-select form-select-sm">
+                  <option value="">未指定</option>
+                  <option value="0">差 (poor)</option>
+                  <option value="5">一般 (neutral)</option>
+                  <option value="8">好 (good)</option>
+                  <option value="10">很好 (very_good)</option>
+                </select>
+              </div>
+
+              <div class="col-6">
+                <label class="form-label small">职业晋升机会（0–10） <span id="promotion_val" class="fw-bold ms-1">5</span></label>
+                <input id="promotion_opportunity" type="range" min="0" max="10" step="1" value="5" class="form-range">
+              </div>
+
+              <div class="col-6">
+                <label class="form-label small">公司知名度（0–10） <span id="reputation_val" class="fw-bold ms-1">7</span></label>
+                <input id="company_reputation" type="range" min="0" max="10" step="1" value="7" class="form-range">
+              </div>
+            </div>
+
+            <hr>
+            <div class="mb-2"><strong>权重设置（可拖动调整）</strong></div>
+            <div class="p-2 bg-secondary bg-opacity-10 rounded mb-2">
+              <div class="row g-2 align-items-center">
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">薪酬 <span id="w_salary_v" class="badge bg-dark ms-1">30</span></label>
+                  <input id="w_salary" type="range" min="0" max="100" value="30" class="form-range">
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">工作负荷 <span id="w_hours_v" class="badge bg-dark ms-1">20</span></label>
+                  <input id="w_hours" type="range" min="0" max="100" value="20" class="form-range">
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">通勤 <span id="w_commute_v" class="badge bg-dark ms-1">10</span></label>
+                  <input id="w_commute" type="range" min="0" max="100" value="10" class="form-range">
+                </div>
+
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">是否打卡 <span id="w_punch_v" class="badge bg-dark ms-1">5</span></label>
+                  <input id="w_punch" type="range" min="0" max="100" value="5" class="form-range">
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">在家办公 <span id="w_wfh_v" class="badge bg-dark ms-1">8</span></label>
+                  <input id="w_wfh" type="range" min="0" max="100" value="8" class="form-range">
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">业务前景 <span id="w_outlook_v" class="badge bg-dark ms-1">10</span></label>
+                  <input id="w_outlook" type="range" min="0" max="100" value="10" class="form-range">
+                </div>
+
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">晋升 <span id="w_promotion_v" class="badge bg-dark ms-1">8</span></label>
+                  <input id="w_promotion" type="range" min="0" max="100" value="8" class="form-range">
+                </div>
+                <div class="col-6 col-md-4">
+                  <label class="form-label small">知名度 <span id="w_reputation_v" class="badge bg-dark ms-1">9</span></label>
+                  <input id="w_reputation" type="range" min="0" max="100" value="9" class="form-range">
+                </div>
+              </div>
+
+              <div class="mt-2 d-flex gap-2 flex-wrap">
+                <button id="btn_reset" class="btn btn-sm btn-outline-light">重置默认</button>
+                <button id="btn_balanced" class="btn btn-sm btn-outline-light">平衡型</button>
+                <button id="btn_money" class="btn btn-sm btn-outline-light">偏薪酬</button>
+                <button id="btn_life" class="btn btn-sm btn-outline-light">偏生活</button>
+                <button id="btn_career" class="btn btn-sm btn-outline-light">偏职业发展</button>
+              </div>
+            </div>
+
+            <div class="small text-muted">提示：若不填写某项，计算会自动忽略该项并按剩余权重归一化。</div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="card p-3 shadow-sm">
+            <div class="d-flex align-items-center mb-2">
+              <strong>评分结果</strong>
+              <div class="text-muted small ms-auto">最终分 0–100</div>
+            </div>
+
+            <div class="d-flex gap-3 align-items-center">
+              <div class="radial" id="radial" aria-hidden="true">
+                <div class="inner" id="radial_inner">--</div>
+              </div>
+              <div class="flex-grow-1">
+                <div id="subscores"></div>
+                <div class="mt-2 d-flex gap-2 align-items-center">
+                  <div class="badge bg-dark">参与权重总和：<span id="weights_sum">0</span></div>
+                  <div class="small text-muted">（显示已提供项）</div>
+                </div>
+              </div>
+            </div>
+
+            <p class="small text-muted mt-3">各子项说明：薪酬按期望或绝对阈值评分；工时以合同为准，超时 &gt;50% 视为很差；通勤单程阈值 15–90 分钟；打卡与 WFH 为偏好因子；前景/晋升/知名度支持 0–10 输入。</p>
+
+            <div class="d-flex gap-2 align-items-center mt-2">
+              <button id="btn_calc" class="btn btn-primary btn-sm">立即计算</button>
+              <button id="btn_export" class="btn btn-outline-light btn-sm">导出 JSON</button>
+              <div class="ms-auto text-muted small">版本 1.0</div>
+            </div>
+
+            <div class="mt-3">
+              <div class="small text-muted">当前输入 JSON（可复制保存）</div>
+              <pre id="json_area" class="json-area mt-1"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+:root{
+  /* Theme colors (adjusted for better contrast / accessibility) */
+  --bg:#0b1220; /* dark page background */
+  --text:#FFFFFF; /* primary text (set to white per request) */
+  --accent:#6ee7b7;
+  --accent-2:#7c3aed;
+  /* muted still uses white, but with reduced opacity so it's visually lighter yet accessible */
+  --muted: rgba(255,255,255,0.72);
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --card-border: rgba(255,255,255,0.06);
+}
+.html,body{height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#071127 0%, #051026 100%);} 
+.html, body { color: var(--text) !important; }
+.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:800;color:#051127;font-size:20px}
+.card{border-radius:12px;border:1px solid var(--card-border);background:var(--card-bg);}
+.card strong{color:#ffffff}
+/* Ensure all text inside cards is white (covers result labels like "薪酬") */
+.card, .card * { color: var(--text) !important; }
+.radial{width:140px;height:140px;border-radius:50%;display:grid;place-items:center;color:#051127;font-weight:800;font-size:28px;background:conic-gradient(var(--accent) 0deg, #111a25 0deg);box-shadow:0 8px 30px rgba(6,32,42,0.6);}
+.radial .inner{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;color:#0b1220;background:linear-gradient(180deg,#e9fdf4 0%, #dff6ec 100%)}
+.json-area{width:100%;height:140px;border-radius:8px;padding:10px;background:rgba(10,14,20,0.48);border:1px solid var(--card-border);color:var(--text);overflow:auto;font-size:13px}
+.small{font-size:12px}
+.bg-opacity-10{background-color:rgba(255,255,255,0.02)!important}
+.badge.bg-dark{background:#0b1220;color:var(--text)}
+.card strong{color:#ffffff}
+.form-range{height:28px}
+.muted{color:var(--muted)}
+
+/* make form controls and smaller text use white as well */
+input, textarea, select, .form-control, .form-select, button { color: var(--text) !important; }
+.small, label, .form-label { color: var(--text) !important; }
+
+/* Make form input text black and give inputs a light background for readability */
+input[type="text"], input[type="number"], input[type="email"], input[type="search"], textarea, .form-control {
+  color: #000 !important;
+  background-color: #ffffff !important;
+}
+/* Selects should show black text on white background as well */
+select.form-select, .form-select { color: #000 !important; background-color: #ffffff !important; }
+
+/* keep radial inner text dark because it sits on a light background */
+.radial .inner{ color: #0b1220 !important; }
+
+/* Dropdown option colors: make the "公司业务前景" options black for readability */
+/* Most browsers allow the option color; use high-specificity + !important to override card color rules. */
+#business_outlook, select#business_outlook { color: #000 !important; }
+#business_outlook option, select#business_outlook option { color: #000 !important; background: #fff !important; }
+
+/* small responsive tweaks */
+@media (max-width:980px){
+  .radial{width:110px;height:110px}
+  .radial .inner{width:86px;height:86px}
+}
