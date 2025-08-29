@@ -71,7 +71,18 @@ function computeTotalScore(inputs, weights, salary_thresholds){
   const max_good = (salary_thresholds && salary_thresholds.max_good) ? salary_thresholds.max_good : 500000;
 
   const scores = {};
-  scores.salary = salaryScore(inputs.annual_salary, inputs.expected_salary, min_good, max_good);
+  // If employer provident fund percentage provided, treat employer contribution as part of package.
+  // employer_pf_pct is percentage (e.g., 12 for 12%). Employer contribution per year ~= annual_salary * employer_pf_pct / 100
+  let effective_salary = null;
+  if (inputs.annual_salary !== null && inputs.annual_salary !== undefined && inputs.annual_salary !== ""){
+    const base = Number(inputs.annual_salary);
+    if (!isNaN(base)){
+      const pfPct = (inputs.employer_pf_pct !== null && inputs.employer_pf_pct !== undefined && inputs.employer_pf_pct !== "") ? Number(inputs.employer_pf_pct) : 0;
+      const employer_pf = (!isNaN(pfPct) && pfPct > 0) ? base * (pfPct / 100) : 0;
+      effective_salary = base + employer_pf;
+    }
+  }
+  scores.salary = salaryScore(effective_salary !== null ? effective_salary : inputs.annual_salary, inputs.expected_salary, min_good, max_good);
   scores.hours = hoursScore(inputs.contracted_hours, inputs.actual_hours);
   scores.commute = commuteScore(inputs.commute_mins);
   scores.punch = punchScore(inputs.punch_required);
@@ -101,7 +112,8 @@ function computeTotalScore(inputs, weights, salary_thresholds){
     weights_used: W,
     present_weights_sum: sumPresentWeights,
     present_items: Object.keys(presentItems),
-    total_score: total
+  total_score: total,
+  effective_salary: effective_salary !== null ? effective_salary : null
   };
 }
 
@@ -112,6 +124,7 @@ function getInputsFromUI(){
   return {
     annual_salary: $("annual_salary").value.trim() || null,
     expected_salary: $("expected_salary").value.trim() || null,
+  employer_pf_pct: $("employer_pf_pct") ? $("employer_pf_pct").value.trim() || null : null,
     contracted_hours: $("contracted_hours").value.trim() || null,
     actual_hours: $("actual_hours").value.trim() || null,
     commute_mins: $("commute_mins").value.trim() || null,
@@ -233,6 +246,9 @@ function init(){
 
   const inputs = ["annual_salary","expected_salary","contracted_hours","actual_hours","commute_mins","business_outlook"];
   inputs.forEach(id=>{ const el=$(id); if (!el) return; el.addEventListener("input", ()=>renderResults()); });
+
+  // ensure employer provident fund input triggers recalculation
+  const ep = $("employer_pf_pct"); if (ep) ep.addEventListener("input", ()=>renderResults());
 
   const presets = {
     default: {salary:30,hours:20,commute:10,punch:5,wfh:8,outlook:10,promotion:8,reputation:9},

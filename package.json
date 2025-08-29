@@ -7,8 +7,9 @@
     "clean": "rimraf dist",
     "build:js": "node -e \"const fs=require('fs');fs.mkdirSync('dist/js',{recursive:true});\" && terser js/app.js -c -m -o dist/js/app.min.js --source-map",
     "build:css": "node -e \"const fs=require('fs');fs.mkdirSync('dist/css',{recursive:true});\" && cleancss -o dist/css/style.min.css css/style.css",
-    "copy": "cpx \"index.html\" dist/ && cpx \"css/*.css\" dist/css && cpx \"js/*.min.js\" dist/js",
-    "build": "npm run clean && npm run build:js && npm run build:css && npm run copy",
+  "copy": "cpx \"index.html\" dist/ && cpx \"css/style.min.css\" dist/css && cpx \"js/*.min.js\" dist/js",
+  "fix-dist-links": "node tools/fix-dist-links.js",
+  "build": "npm run clean && npm run build:js && npm run build:css && npm run copy && npm run fix-dist-links",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
