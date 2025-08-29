@@ -1,0 +1,50 @@
+## Node
+node_modules/
+
+## Build output
+dist/
+build/
+
+## Logs
+npm-debug.log*
+*.log
+logs/
+
+## Environment files
+.env
+.env.local
+.env.*.local
+
+## OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+## IDE / editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.iml
+
+## Python
+__pycache__/
+*.py[cod]
+
+## Coverage and cache
+coverage/
+.nyc_output/
+.cache/
+
+## Temporary
+tmp/
+temp/
+
+## Source maps (optional to ignore)
+*.map
+
+## Misc
+/.pnp/
+.pnp.js

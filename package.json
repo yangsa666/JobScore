@@ -1,0 +1,31 @@
+{
+  "name": "jobscore",
+  "version": "1.0.0",
+  "description": "Lightweight static web app to score job offers by salary, hours, commute and career factors.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:js": "node -e \"const fs=require('fs');fs.mkdirSync('dist/js',{recursive:true});\" && terser js/app.js -c -m -o dist/js/app.min.js --source-map",
+    "build:css": "node -e \"const fs=require('fs');fs.mkdirSync('dist/css',{recursive:true});\" && cleancss -o dist/css/style.min.css css/style.css",
+    "copy": "cpx \"index.html\" dist/ && cpx \"css/*.css\" dist/css && cpx \"js/*.min.js\" dist/js",
+    "build": "npm run clean && npm run build:js && npm run build:css && npm run copy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yangsa666/JobScore.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yangsa666/JobScore/issues"
+  },
+  "homepage": "https://github.com/yangsa666/JobScore#readme",
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "cpx": "^1.5.0",
+    "rimraf": "^6.0.1",
+    "terser": "^5.43.1"
+  }
+}
